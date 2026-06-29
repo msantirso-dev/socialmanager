@@ -16,6 +16,32 @@ Plataforma SaaS de generación automática de contenido con IA y publicación en
 
 ## Inicio rápido
 
+### Local (Docker Compose)
+
+```powershell
+# Windows
+.\scripts\setup-local.ps1
+
+# Linux / Mac
+./scripts/setup-local.sh
+```
+
+### Coolify (producción)
+
+```powershell
+# Windows — genera variables listas para pegar en Coolify
+.\scripts\setup-coolify.ps1
+
+# Linux / servidor
+chmod +x scripts/setup-coolify.sh && ./scripts/setup-coolify.sh
+```
+
+El script crea `scripts/coolify-output/` con:
+- `backend.env`, `celery-worker.env`, `celery-beat.env`, `frontend.env`
+- `SERVICIOS.md` — guía de cada servicio en Coolify
+
+### Manual
+
 ```bash
 # 1. Clonar y configurar
 git clone <repo-url> social-ai-manager
