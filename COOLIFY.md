@@ -18,6 +18,18 @@
 | Port | `3000` |
 | Static site | No |
 
+> **Nota:** Dockerfile Location = `Dockerfile.prod` (sin `/` al inicio). Con Base Directory `frontend`, Coolify usa `frontend/Dockerfile.prod`.
+
+### Tiempos de build (normal)
+
+| Deploy | Tiempo aproximado |
+|--------|-------------------|
+| **Primera vez** | 3–8 min (descarga deps + `next build`) |
+| **Redeploy sin cambios en deps** | 1–3 min (cache de `npm ci`) |
+| **Solo cambios de código** | 2–4 min (`next build`) |
+
+Si tarda **más de 10 min**, revisá CPU/RAM del servidor en Coolify.
+
 **Build Arguments (opcional):**
 
 ```
