@@ -39,6 +39,7 @@ $RedisBase = $RedisBase.TrimEnd('/')
 $RedisUrl = "$RedisBase/0"
 $CeleryBroker = "$RedisBase/1"
 $CeleryBackend = "$RedisBase/2"
+$BackendInternalUrl = Read-Host "Backend Internal URL para el Frontend (ej: http://backend-xxx:8000)"
 
 # --- Secretos ---
 $SecretKey = New-RandomHex
@@ -121,7 +122,9 @@ $CeleryBeatEnv | Out-File -FilePath (Join-Path $OutDir "celery-beat.env") -Encod
 
 # --- Frontend ---
 $FrontendEnv = @"
-NEXT_PUBLIC_API_URL=$ApiUrl
+# Pegar en Coolify -> Frontend -> Environment Variables
+BACKEND_INTERNAL_URL=$BackendInternalUrl
+NEXT_PUBLIC_API_URL=
 NEXT_PUBLIC_APP_NAME=Social AI Manager
 "@
 $FrontendEnv | Out-File -FilePath (Join-Path $OutDir "frontend.env") -Encoding utf8NoBOM
@@ -176,8 +179,8 @@ Repositorio: https://github.com/msantirso-dev/socialmanager
 | Dockerfile | ``frontend/Dockerfile.prod`` |
 | Port | ``3000`` |
 | Domain | ``$AppDomain`` |
-| Build args | ``NEXT_PUBLIC_API_URL=$ApiUrl`` |
 | Variables | ``scripts/coolify-output/frontend.env`` |
+| Importante | ``BACKEND_INTERNAL_URL=$BackendInternalUrl`` |
 
 ## Meta Developers
 

@@ -30,6 +30,7 @@ REDIS_BASE="${REDIS_BASE%/}"
 REDIS_URL="${REDIS_BASE}/0"
 CELERY_BROKER_URL="${REDIS_BASE}/1"
 CELERY_RESULT_BACKEND="${REDIS_BASE}/2"
+read -rp "Backend Internal URL para el Frontend (ej: http://backend-xxx:8000): " BACKEND_INTERNAL_URL
 
 # --- Secretos automáticos ---
 gen_secret() { openssl rand -hex 32 2>/dev/null || python3 -c "import secrets; print(secrets.token_hex(32))"; }
@@ -116,7 +117,8 @@ EOF
 # --- Frontend env ---
 cat > "$OUT_DIR/frontend.env" << EOF
 # Pegar en Coolify → Frontend → Environment Variables
-NEXT_PUBLIC_API_URL=${API_URL}
+BACKEND_INTERNAL_URL=${BACKEND_INTERNAL_URL}
+NEXT_PUBLIC_API_URL=
 NEXT_PUBLIC_APP_NAME=Social AI Manager
 EOF
 
@@ -171,8 +173,8 @@ Repositorio: https://github.com/msantirso-dev/socialmanager
 | Dockerfile | \`frontend/Dockerfile.prod\` |
 | Port | \`3000\` |
 | Domain | \`${APP_DOMAIN}\` |
-| Build args | \`NEXT_PUBLIC_API_URL=${API_URL}\` |
 | Variables | \`scripts/coolify-output/frontend.env\` |
+| Importante | \`BACKEND_INTERNAL_URL=${BACKEND_INTERNAL_URL}\` |
 
 ## Meta Developers
 
