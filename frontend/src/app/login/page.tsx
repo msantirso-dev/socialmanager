@@ -22,7 +22,7 @@ export default function LoginPage() {
     setError("");
     setLoading(true);
     try {
-      await login(email, password);
+      await login(email.trim(), password);
     } catch (err) {
       setError(err instanceof ApiError ? err.message : "Error al iniciar sesión");
     } finally {

@@ -1,6 +1,7 @@
 import { clearAuth, getAccessToken, getRefreshToken, saveTokens, type AuthTokens, type LoginResponse, type User } from "./auth";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+// Vacío = rutas relativas /api/... (proxy Next.js en dev). Producción: NEXT_PUBLIC_API_URL completa.
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
 
 export class ApiError extends Error {
   constructor(
