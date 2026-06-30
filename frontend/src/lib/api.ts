@@ -1,7 +1,12 @@
 import { clearAuth, getAccessToken, getRefreshToken, saveTokens, type AuthTokens, type LoginResponse, type User } from "./auth";
 
-// Vacío = rutas relativas /api/... (proxy Next.js en dev). Producción: NEXT_PUBLIC_API_URL completa.
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
+/** En el navegador siempre /api relativo (proxy Next.js). Ignora NEXT_PUBLIC_API_URL del build. */
+function getApiBase(): string {
+  if (typeof window !== "undefined") return "";
+  const internal = process.env.BACKEND_INTERNAL_URL?.replace(/\/$/, "");
+  if (internal) return internal;
+  return process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ?? "";
+}
 
 export class ApiError extends Error {
   constructor(
@@ -30,7 +35,7 @@ async function refreshAccessToken(): Promise<boolean> {
   const refreshToken = getRefreshToken();
   if (!refreshToken) return false;
 
-  const res = await fetch(`${API_URL}/api/v1/auth/refresh`, {
+  const res = await fetch(`${getApiBase()}/api/v1/auth/refresh`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ refresh_token: refreshToken }),
@@ -53,10 +58,10 @@ export async function apiFetch<T>(path: string, options?: RequestInit, retry = t
 
   let res: Response;
   try {
-    res = await fetch(`${API_URL}${path}`, { ...options, headers });
+    res = await fetch(`${getApiBase()}${path}`, { ...options, headers });
   } catch {
     throw new ApiError(
-      "No se pudo conectar con el servidor. ¿Está corriendo el backend?",
+      "No se pudo conectar con el API. Verificá BACKEND_INTERNAL_URL en Coolify y que el backend esté corriendo.",
       0
     );
   }
@@ -104,4 +109,4 @@ export async function logoutApi(): Promise<void> {
   clearAuth();
 }
 
-export { API_URL };
+export { getApiBase as API_URL };

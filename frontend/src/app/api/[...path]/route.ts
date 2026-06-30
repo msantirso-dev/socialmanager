@@ -3,17 +3,30 @@ import { NextRequest, NextResponse } from "next/server";
 export const runtime = "nodejs";
 
 function getBackendUrl(): string {
-  const url =
-    process.env.BACKEND_INTERNAL_URL ||
-    process.env.NEXT_PUBLIC_API_URL ||
-    "http://localhost:8000";
+  const url = process.env.BACKEND_INTERNAL_URL;
+  if (!url) {
+    throw new Error("BACKEND_INTERNAL_URL is not set");
+  }
   return url.replace(/\/$/, "");
 }
 
 const HOP_BY_HOP = new Set(["connection", "keep-alive", "transfer-encoding", "upgrade", "host"]);
 
 async function proxyRequest(request: NextRequest, path: string[]) {
-  const targetUrl = `${getBackendUrl()}/api/${path.join("/")}${request.nextUrl.search}`;
+  let backend: string;
+  try {
+    backend = getBackendUrl();
+  } catch {
+    return NextResponse.json(
+      {
+        detail:
+          "BACKEND_INTERNAL_URL no está configurado en el frontend. Pegá la Internal URL del servicio Backend en Coolify.",
+      },
+      { status: 503 }
+    );
+  }
+
+  const targetUrl = `${backend}/api/${path.join("/")}${request.nextUrl.search}`;
 
   const headers = new Headers();
   request.headers.forEach((value, key) => {
@@ -37,7 +50,9 @@ async function proxyRequest(request: NextRequest, path: string[]) {
     });
   } catch {
     return NextResponse.json(
-      { detail: "No se pudo conectar con el backend. Verificá BACKEND_INTERNAL_URL en Coolify." },
+      {
+        detail: `No se pudo conectar con el backend (${backend}). Verificá que esté corriendo y en la misma red de Coolify.`,
+      },
       { status: 502 }
     );
   }

@@ -141,9 +141,21 @@ PostgreSQL → Redis → Backend → Celery Worker → Celery Beat → Frontend
 
 - [ ] Backend health check OK (`/api/v1/health/ready`)
 - [ ] `RUN_SEED=true` ejecutado al menos una vez
-- [ ] Frontend tiene `BACKEND_INTERNAL_URL` apuntando al backend interno
-- [ ] `NEXT_PUBLIC_API_URL` vacío en el frontend
+- [ ] Frontend tiene **`BACKEND_INTERNAL_URL`** = Internal URL del Backend (ej: `http://backend-abc:8000`)
+- [ ] **No** uses la URL pública del API en el frontend
+- [ ] Eliminá `NEXT_PUBLIC_API_URL` de Build Args si la tenías
+- [ ] Backend y Frontend en el **mismo proyecto** de Coolify
 - [ ] Redeploy del frontend después de cambiar variables
+
+### Probar conexión manual
+
+Abrí en el navegador (mismo dominio del frontend):
+
+```
+https://tu-frontend.sslip.io/api/v1/health
+```
+
+Deberías ver `{"status":"ok",...}`. Si ves error 503/502, falta o está mal `BACKEND_INTERNAL_URL`.
 
 ---
 
