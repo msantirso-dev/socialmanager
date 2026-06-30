@@ -8,11 +8,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const STATUS_COLORS: Record<string, string> = {
-  draft: "bg-gray-500/10 text-gray-600",
-  scheduled: "bg-blue-500/10 text-blue-600",
-  published: "bg-green-500/10 text-green-600",
-  failed: "bg-red-500/10 text-red-600",
-  publishing: "bg-yellow-500/10 text-yellow-600",
+  draft: "bg-muted text-muted-foreground",
+  scheduled: "bg-blue-500/10 text-blue-600 dark:text-blue-400",
+  published: "bg-green-500/10 text-green-600 dark:text-green-400",
+  failed: "bg-red-500/10 text-red-600 dark:text-red-400",
+  publishing: "bg-yellow-500/10 text-yellow-600 dark:text-yellow-400",
 };
 
 export default function CalendarPage() {

@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/components/auth/auth-provider";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { cn } from "@/lib/utils";
 
 const navItems = [
@@ -43,7 +44,7 @@ export function Sidebar() {
           </Link>
         ))}
       </nav>
-      <div className="border-t p-4">
+      <div className="border-t p-4 space-y-2">
         {user && (
           <div className="mb-3 space-y-1">
             <p className="truncate text-sm font-medium">{user.full_name}</p>
@@ -51,6 +52,7 @@ export function Sidebar() {
             <p className="text-xs text-primary">{ROLE_LABELS[user.role] || user.role}</p>
           </div>
         )}
+        <ThemeToggle variant="menu" />
         <Button variant="outline" size="sm" className="w-full" onClick={() => logout()}>
           <LogOut className="mr-2 h-4 w-4" /> Cerrar sesión
         </Button>
