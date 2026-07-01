@@ -1,0 +1,70 @@
+# PASOS COOLIFY — Social AI Manager (VPS)
+
+## Rama de deploy
+
+| Campo | Valor |
+|-------|--------|
+| **Repositorio** | https://github.com/msantirso-dev/socialmanager |
+| **Rama Coolify** | `servidor-vps` |
+| **NO usar** | `main` (rama producto, protegida) |
+
+Coolify → tu app → **Configuration → Branch** → `servidor-vps` → Save → Redeploy.
+
+---
+
+## Frontend
+
+| Campo | Valor |
+|-------|--------|
+| Base Directory | `frontend` |
+| Dockerfile | `Dockerfile.prod` |
+| Port | `3000` |
+
+**Environment Variables (runtime):**
+
+```
+BACKEND_INTERNAL_URL=http://<internal-url-backend>:8000
+NEXT_PUBLIC_API_URL=
+NEXT_PUBLIC_APP_NAME=Social AI Manager
+```
+
+---
+
+## Backend
+
+| Campo | Valor |
+|-------|--------|
+| Base Directory | `backend` |
+| Dockerfile | `Dockerfile` |
+| Port | `8000` |
+| Health Check | `/api/v1/health/ready` |
+
+Variables mínimas: ver `COOLIFY.md` o `scripts/coolify-output/backend.env`
+
+Primera vez: `RUN_SEED=true` → redeploy → luego `RUN_SEED=false`.
+
+---
+
+## Flujo de ramas (equipo)
+
+```
+servidor-vps  →  VPS / Coolify (deploy directo)
+main          →  producto (solo entra por PR con review)
+
+Aportar al producto:     PR  servidor-vps → main
+Traer producto al VPS:   merge main → servidor-vps → redeploy Coolify
+```
+
+**No pushear directo a `main`.**
+
+---
+
+## Probar conexión API
+
+```
+https://<tu-dominio-frontend>/api/v1/health
+```
+
+Debe responder: `{"status":"ok",...}`
+
+Login demo: `admin@example.com` / `Admin123!`
