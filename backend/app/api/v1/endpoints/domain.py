@@ -26,7 +26,7 @@ from app.schemas.domain import (
 )
 from app.services.ai_service import generate_content, generate_image
 from app.services.comment_service import list_comments, reply_comment, sync_comments_from_instagram
-from app.services.company_service import create_company, get_company, list_companies, update_company
+from app.services.company_service import create_company, delete_company, get_company, list_companies, update_company
 from app.services.dashboard_service import get_dashboard, get_metrics_summary
 from app.services.post_service import create_post, list_posts, publish_post_now, update_post
 from app.services.social_service import (
@@ -61,12 +61,25 @@ async def companies_get(company_id: UUID, user: Annotated[User, Depends(get_curr
 @router.post("/companies", response_model=CompanyResponse)
 async def companies_create(
     data: CompanyCreate,
-    org_id: UUID,
+    user: Annotated[User, Depends(require_role(UserRole.ADMIN))],
+    db: Annotated[AsyncSession, Depends(get_db)],
+    org_id: UUID | None = Query(None),
+):
+    try:
+        return await create_company(db, user, data, org_id)
+    except ValueError as e:
+        _err(e)
+
+
+@router.delete("/companies/{company_id}")
+async def companies_delete(
+    company_id: UUID,
     user: Annotated[User, Depends(require_role(UserRole.ADMIN))],
     db: Annotated[AsyncSession, Depends(get_db)],
 ):
     try:
-        return await create_company(db, user, org_id, data)
+        await delete_company(db, user, company_id)
+        return {"message": "Company deleted"}
     except ValueError as e:
         _err(e)
 

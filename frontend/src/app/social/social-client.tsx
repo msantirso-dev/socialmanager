@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Instagram, Loader2, RefreshCw } from "lucide-react";
-import { useCompanies } from "@/hooks/use-companies";
+import { useCompanies } from "@/components/companies/companies-provider";
 import { api, type SocialAccount } from "@/lib/domain-api";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -38,7 +38,10 @@ export default function SocialPageInner() {
       {connected && <div className="mb-4 rounded-md bg-green-500/10 p-3 text-green-700">Instagram conectado correctamente</div>}
       {error && <div className="mb-4 rounded-md bg-destructive/10 p-3 text-destructive">{error}</div>}
       {(cl || loading) && <Loader2 className="animate-spin" />}
-      {selected && (
+      {!cl && !selected && (
+        <p className="text-muted-foreground">Creá o seleccioná una empresa para conectar Instagram.</p>
+      )}
+      {selected && !cl && (
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2"><Instagram className="h-5 w-5" /> Instagram</CardTitle>

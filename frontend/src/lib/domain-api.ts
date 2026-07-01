@@ -56,6 +56,11 @@ export interface Comment {
 
 export const api = {
   companies: () => apiFetch<Company[]>("/api/v1/companies"),
+  createCompany: (data: Partial<Company> & { name: string }) =>
+    apiFetch<Company>("/api/v1/companies", { method: "POST", body: JSON.stringify(data) }),
+  updateCompany: (id: string, data: Partial<Company>) =>
+    apiFetch<Company>(`/api/v1/companies/${id}`, { method: "PATCH", body: JSON.stringify(data) }),
+  deleteCompany: (id: string) => apiFetch<{ message: string }>(`/api/v1/companies/${id}`, { method: "DELETE" }),
   dashboard: () => apiFetch<Dashboard>("/api/v1/dashboard"),
   metrics: (companyId?: string) => apiFetch<{ posts: unknown[]; totals: Record<string, number> }>(`/api/v1/metrics${companyId ? `?company_id=${companyId}` : ""}`),
   socialAccounts: (companyId: string) => apiFetch<SocialAccount[]>(`/api/v1/social/accounts?company_id=${companyId}`),

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { BarChart3, Loader2 } from "lucide-react";
-import { useCompanies } from "@/hooks/use-companies";
+import { useCompanies } from "@/components/companies/companies-provider";
 import { api } from "@/lib/domain-api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 

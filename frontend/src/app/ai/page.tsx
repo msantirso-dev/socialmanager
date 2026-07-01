@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Loader2, Sparkles } from "lucide-react";
-import { useCompanies } from "@/hooks/use-companies";
+import { useCompanies } from "@/components/companies/companies-provider";
 import { api } from "@/lib/domain-api";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 export default function AIPage() {
-  const { selected } = useCompanies();
+  const { selected, loading: companiesLoading } = useCompanies();
   const [concept, setConcept] = useState("");
   const [result, setResult] = useState<Record<string, unknown> | null>(null);
   const [loading, setLoading] = useState(false);
@@ -51,6 +51,9 @@ export default function AIPage() {
   return (
     <div className="p-8">
       <h1 className="mb-6 text-3xl font-bold">Generador IA</h1>
+      {!companiesLoading && !selected && (
+        <p className="mb-6 text-muted-foreground">Creá o seleccioná una empresa en el menú lateral para generar contenido.</p>
+      )}
       <Card className="mb-6">
         <CardHeader><CardTitle>Concepto</CardTitle></CardHeader>
         <CardContent className="space-y-4">

@@ -6,6 +6,7 @@ import {
   Building2, Calendar, LayoutDashboard, LogOut, MessageSquare, Share2, Sparkles, BarChart3,
 } from "lucide-react";
 import { useAuth } from "@/components/auth/auth-provider";
+import { CompanySelector } from "@/components/companies/company-selector";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { cn } from "@/lib/utils";
@@ -44,6 +45,9 @@ export function Sidebar() {
           </Link>
         ))}
       </nav>
+      <div className="border-t p-4">
+        <CompanySelector />
+      </div>
       <div className="border-t p-4 space-y-2">
         {user && (
           <div className="mb-3 space-y-1">
